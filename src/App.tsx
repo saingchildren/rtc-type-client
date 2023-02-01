@@ -1,26 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState }  from "react"
+import Context from "./contexts/Context"
+import io, { Socket } from "socket.io-client"
+import Router from "./routers/Router"
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const App: React.FC = () => {
+	
+	document.body.style.backgroundColor = "#1E1E1E"
+
+	const [username, setUserName] = useState<string>("");
+	const [room, setRoom] = useState<string>("");
+	const [socket, setSocket] = useState<Socket>();
+
+	useEffect(() => {
+		setSocket(io("http://localhost:1100"))
+	}, [])
+	
+	return (
+		<Context.Provider value={{
+			username: username,
+			setUserName: setUserName,
+			room: room,
+			setRoom: setRoom,
+			socket: socket
+		}}>
+			<Router />
+		</Context.Provider>
+	)
+	
 }
 
-export default App;
+export default App
